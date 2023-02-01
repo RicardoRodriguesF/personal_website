@@ -1,4 +1,4 @@
-# personal_website
+# Personal Website
 
 "Welcome to my personal website repository! 
 
