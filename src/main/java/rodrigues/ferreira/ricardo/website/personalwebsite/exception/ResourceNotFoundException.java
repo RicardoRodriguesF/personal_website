@@ -1,14 +1,13 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-public class ResourceNotFoundException extends ResponseStatusException {
-    public ResourceNotFoundException(HttpStatus status, String reason) {
-        super(status, reason);
-    }
 
-    public ResourceNotFoundException(String reason){
-        this(HttpStatus.NOT_FOUND, reason);
+@ResponseStatus(value = HttpStatus.FOUND)
+public abstract class ResourceNotException extends ApiRequestException{
+
+    public ResourceNotException(String message) {
+        super(message);
     }
 }
