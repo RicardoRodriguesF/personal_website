@@ -1,5 +1,6 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,8 +28,8 @@ public class PostController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostDTO createPost(@RequestBody @Valid PostDTO postInput) {
-        Post post = postMapper.toEntity(postInput);
+    public PostDTO createPost(@RequestBody @Valid PostDTO postRequest) {
+        Post post = postMapper.toEntity(postRequest);
         post = postService.createPost(post);
 
         return postMapper.toDto(post);
@@ -45,7 +46,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public PostDTO getPostById(@PathVariable("id") Long posId) {
-        Post post = postService.findOrFail(posId);
+        Post post = postService.findOrElseThrow(posId);
         return postMapper.toDto(post);
     }
 
@@ -53,8 +54,10 @@ public class PostController {
     @PutMapping("/{id}")
     public PostDTO updatePost(@PathVariable("id") Long postId,
                               @RequestBody @Valid PostDTO postDTO ) {
-        Post post = postService.findOrFail(postId);
+        Post post = postService.findOrElseThrow(postId);
         postMapper.copyToEntity(postDTO, post);
+        BeanUtils.copyProperties(postDTO, post, "id");
+
         post = postService.createPost(post);
 
         return postMapper.toDto(post);

@@ -17,7 +17,7 @@ public class Post extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -36,4 +36,8 @@ public class Post extends BaseModel {
     */
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Category category;
 }

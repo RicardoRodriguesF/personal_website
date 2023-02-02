@@ -31,7 +31,7 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO createComment(@PathVariable(value = "postId") Long postId,
                                     @RequestBody @Valid CommentDTO commentDTO) {
-        Post post = postService.findOrFail(postId);
+        Post post = postService.findOrElseThrow(postId);
         Comment comment = commentMapper.toEntity(commentDTO);
         comment.setPost(post);
         comment = commentService.createComment(comment);
@@ -41,6 +41,10 @@ public class CommentController {
 
     @GetMapping("{postId}/comments")
     public @ResponseBody List<CommentDTO> getAllComment(@PathVariable("postId") Long postId) {
+        Post post = postService.findOrElseThrow(postId);
+        if (!postId.equals(post.getId())) {
+            throw new PostNotFoundException(postId);
+        }
         List<Comment> commentList = commentService.getCommentsByPostId(postId);
         return commentMapper.toCollectionDto(commentList);
     }
@@ -48,13 +52,12 @@ public class CommentController {
     @GetMapping("/{postId}/comment/{id}")
     public CommentDTO getCommentById(@PathVariable("postId") Long postId,
                                      @PathVariable("id") Long commentId) {
-        Comment comment = commentService.findOrFail(commentId);
-        Post post = postService.findOrFail(postId);
+        Post post = postService.findOrElseThrow(postId);
+        Comment comment = commentService.findOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
         }
-
         return commentMapper.toDto(comment);
     }
 
@@ -63,8 +66,8 @@ public class CommentController {
     public CommentDTO updateComment(@PathVariable("postId") Long postId,
                                     @PathVariable("id") Long commentId,
                               @RequestBody @Valid CommentDTO commentDTO ) {
-        Post post = postService.findOrFail(postId);
-        Comment comment = commentService.findOrFail(commentId);
+        Post post = postService.findOrElseThrow(postId);
+        Comment comment = commentService.findOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
@@ -84,8 +87,8 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable("postId") Long postId,
                               @PathVariable("id") Long commentId) {
-        Post post = postService.findOrFail(postId);
-        Comment comment = commentService.findOrFail(commentId);
+        Post post = postService.findOrElseThrow(postId);
+        Comment comment = commentService.findOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);

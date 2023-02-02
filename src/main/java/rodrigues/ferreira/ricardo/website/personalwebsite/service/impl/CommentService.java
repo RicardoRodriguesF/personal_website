@@ -1,8 +1,6 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Comment;
 import rodrigues.ferreira.ricardo.website.personalwebsite.exception.CommentNotFound;
@@ -28,13 +26,13 @@ public class CommentService {
    /* public Page<Comment> getCommentPaged(Pageable pageble) {
         return repository.findAll(pageble);
     }*/
-
-    public Comment findOrFail(Long CommentId) {
-        return repository.findById(CommentId).orElseThrow(() -> new CommentNotFound(CommentId));
-    }
-
     public void deleteComment(Long id) {
         repository.deleteById(id);
     }
+
+    public Comment findOrElseThrow(Long CommentId) {
+        return repository.findById(CommentId).orElseThrow(() -> new CommentNotFound(CommentId));
+    }
+
 
 }

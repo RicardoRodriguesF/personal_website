@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(value = HttpStatus.FOUND)
-public abstract class ResourceNotException extends ApiRequestException{
+public abstract class ResourceNotFoundException extends ApiRequestException{
 
-    public ResourceNotException(String message) {
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 }

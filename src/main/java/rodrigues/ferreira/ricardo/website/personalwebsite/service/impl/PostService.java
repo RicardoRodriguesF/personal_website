@@ -1,6 +1,7 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,15 +19,26 @@ public class PostService {
         return postRepository.save(post);
     }
 
+    public Post updatePost(Post post) {
+        return postRepository.save(post);
+    }
+
     public Page<Post> getPostPaged(Pageable pageble) {
         return postRepository.findAll(pageble);
     }
 
-    public Post findOrFail(Long posId) {
-        return postRepository.findById(posId).orElseThrow(() -> new PostNotFoundException(posId));
+    public Post findOrElseThrow(Long posId) {
+        Post post = postRepository.findById(posId).orElseThrow(() -> new PostNotFoundException(posId));
+        postRepository.flush();
+        return post;
     }
 
     public void deletePost(Long id) {
-        postRepository.deleteById(id);
+        try {
+            postRepository.deleteById(id);
+            postRepository.flush();
+        } catch (EmptyResultDataAccessException e) {
+            throw new PostNotFoundException(id);
+        }
     }
 }
