@@ -8,9 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CategoryDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.repository.CategoryRepository;
+import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CategoryService;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.PostService;
 
 import javax.validation.Valid;
@@ -26,13 +30,17 @@ public class PostController {
     @Autowired
     private PostMapper postMapper;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public PostDTO createPost(@RequestBody @Valid PostDTO postRequest) {
-        Post post = postMapper.toEntity(postRequest);
+        Category category = categoryService.findOrElseThrow(postRequest.getCategoryId());
+        Post post = postMapper.convertToEntity(postRequest);
+        post.setCategory(category);
         post = postService.createPost(post);
-
-        return postMapper.toDto(post);
+        return postMapper.convertToDto(post);
     }
 
     @GetMapping("/getAll")
@@ -47,7 +55,7 @@ public class PostController {
     @GetMapping("/{id}")
     public PostDTO getPostById(@PathVariable("id") Long posId) {
         Post post = postService.findOrElseThrow(posId);
-        return postMapper.toDto(post);
+        return postMapper.convertToDto(post);
     }
 
     /* update post */
@@ -60,7 +68,7 @@ public class PostController {
 
         post = postService.createPost(post);
 
-        return postMapper.toDto(post);
+        return postMapper.convertToDto(post);
     }
 
     @DeleteMapping("/{id}")

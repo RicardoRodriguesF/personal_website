@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
-@NoArgsConstructor
 public class PostDTO extends BaseDTO{
 
     @NotEmpty
@@ -20,4 +20,8 @@ public class PostDTO extends BaseDTO{
 
     @NotEmpty
     private String content;
+
+    private Set<CommentDTO> comments;
+
+    private Long categoryId;
 }

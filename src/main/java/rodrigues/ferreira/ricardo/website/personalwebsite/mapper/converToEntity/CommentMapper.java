@@ -15,16 +15,16 @@ public class CommentMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public CommentDTO toDto(Comment comment) {
+    public CommentDTO convertToDto(Comment comment) {
         return modelMapper.map(comment, CommentDTO.class);
     }
 
-    public Comment toEntity(CommentDTO commentDTO) {
+    public Comment convertToEntity(CommentDTO commentDTO) {
         return modelMapper.map(commentDTO, Comment.class);
     }
 
     public List<CommentDTO> toCollectionDto(List<Comment> commentList) {
-        return commentList.stream().map(this::toDto).collect(Collectors.toList());
+        return commentList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public void copyToEntity(CommentDTO commentDTO, Comment comment) {

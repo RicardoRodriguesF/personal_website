@@ -15,16 +15,16 @@ public class PostMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public PostDTO toDto(Post post) {
+    public PostDTO convertToDto(Post post) {
         return modelMapper.map(post, PostDTO.class);
     }
 
-    public Post toEntity(PostDTO postDTO) {
+    public Post convertToEntity(PostDTO postDTO) {
         return modelMapper.map(postDTO, Post.class);
     }
 
     public List<PostDTO> toCollectionDto(List<Post> postList) {
-        return postList.stream().map(this::toDto).collect(Collectors.toList());
+        return postList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     public void copyToEntity(PostDTO postDTO, Post post) {

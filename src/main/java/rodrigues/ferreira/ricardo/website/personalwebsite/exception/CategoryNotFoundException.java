@@ -6,6 +6,6 @@ public class CategoryNotFoundException extends ResourceNotFoundException {
     }
 
     public CategoryNotFoundException(Long categoryId) {
-        this(String.format("Post not found with id : '%s", categoryId));
+        this(String.format("Category not found with id : '%s", categoryId));
     }
 }

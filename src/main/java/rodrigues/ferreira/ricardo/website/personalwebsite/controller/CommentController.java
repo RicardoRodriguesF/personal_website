@@ -32,11 +32,11 @@ public class CommentController {
     public CommentDTO createComment(@PathVariable(value = "postId") Long postId,
                                     @RequestBody @Valid CommentDTO commentDTO) {
         Post post = postService.findOrElseThrow(postId);
-        Comment comment = commentMapper.toEntity(commentDTO);
+        Comment comment = commentMapper.convertToEntity(commentDTO);
         comment.setPost(post);
         comment = commentService.createComment(comment);
 
-        return commentMapper.toDto(comment);
+        return commentMapper.convertToDto(comment);
     }
 
     @GetMapping("{postId}/comments")
@@ -58,7 +58,7 @@ public class CommentController {
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
         }
-        return commentMapper.toDto(comment);
+        return commentMapper.convertToDto(comment);
     }
 
     /* update comment */
@@ -80,7 +80,7 @@ public class CommentController {
 
         comment = commentService.createComment(comment);
 
-        return commentMapper.toDto(comment);
+        return commentMapper.convertToDto(comment);
     }
 
     @DeleteMapping("/{postId}/comment/{id}")

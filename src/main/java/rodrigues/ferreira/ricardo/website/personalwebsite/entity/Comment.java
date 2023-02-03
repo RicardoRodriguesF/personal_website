@@ -15,8 +15,8 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "comments")
 public class Comment extends BaseModel{
+
     @NotBlank
-    @Max(100)
     private String name;
     @Email
     private String email;

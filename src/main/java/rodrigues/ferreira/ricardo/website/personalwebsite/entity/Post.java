@@ -35,9 +35,9 @@ public class Post extends BaseModel {
     * relacionados a um concessionária. Se a concessionári
     */
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 }
