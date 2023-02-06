@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class PostDTO extends BaseDTO{
+public class PostShortDTO extends BaseDTO{
 
 
     private String title;
@@ -18,9 +18,5 @@ public class PostDTO extends BaseDTO{
     private LocalDate createdOn;
 
     private LocalDate updatedOn;
-
-    private Set<CommentDTO> comments;
-
-    private CategoryDTO category;
 
 }

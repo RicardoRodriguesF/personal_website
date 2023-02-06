@@ -4,7 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CommentDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Comment;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +30,7 @@ public class CommentMapper {
         return commentList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public void copyToEntity(CommentDTO commentDTO, Comment comment) {
+    public void copyToDomainObject(CommentDTO commentDTO, Comment comment) {
         modelMapper.map(commentDTO, comment);
     }
 }

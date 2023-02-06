@@ -30,7 +30,7 @@ public class CommentService {
         repository.deleteById(id);
     }
 
-    public Comment findOrElseThrow(Long CommentId) {
+    public Comment findCommentOrElseThrow(Long CommentId) {
         return repository.findById(CommentId).orElseThrow(() -> new CommentNotFound(CommentId));
     }
 

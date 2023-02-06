@@ -1,27 +1,29 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "comments")
 public class Comment extends BaseModel{
 
-    @NotBlank
+    @Column
     private String name;
-    @Email
+    @Column
     private String email;
-    @NotBlank
+    @Column
     private String body;
+    @Column(nullable = false, columnDefinition = "datetime")
+    private LocalDate createdOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)

@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/post/{postId}")
 public class CommentController {
 
     @Autowired
@@ -27,11 +27,11 @@ public class CommentController {
     @Autowired
     private CommentMapper commentMapper;
 
-    @PostMapping("/{postId}/new_comment")
+    @PostMapping("/new_comment")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO createComment(@PathVariable(value = "postId") Long postId,
                                     @RequestBody @Valid CommentDTO commentDTO) {
-        Post post = postService.findOrElseThrow(postId);
+        Post post = postService.findPostOrElseThrow(postId);
         Comment comment = commentMapper.convertToEntity(commentDTO);
         comment.setPost(post);
         comment = commentService.createComment(comment);
@@ -39,9 +39,9 @@ public class CommentController {
         return commentMapper.convertToDto(comment);
     }
 
-    @GetMapping("{postId}/comments")
-    public @ResponseBody List<CommentDTO> getAllComment(@PathVariable("postId") Long postId) {
-        Post post = postService.findOrElseThrow(postId);
+    @GetMapping("/comments")
+    public @ResponseBody List<CommentDTO> showAllComments(@PathVariable("postId") Long postId) {
+        Post post = postService.findPostOrElseThrow(postId);
         if (!postId.equals(post.getId())) {
             throw new PostNotFoundException(postId);
         }
@@ -49,11 +49,11 @@ public class CommentController {
         return commentMapper.toCollectionDto(commentList);
     }
 
-    @GetMapping("/{postId}/comment/{id}")
-    public CommentDTO getCommentById(@PathVariable("postId") Long postId,
-                                     @PathVariable("id") Long commentId) {
-        Post post = postService.findOrElseThrow(postId);
-        Comment comment = commentService.findOrElseThrow(commentId);
+    @GetMapping("/comment/{id}")
+    public CommentDTO showSingleComment(@PathVariable("postId") Long postId,
+                                        @PathVariable("id") Long commentId) {
+        Post post = postService.findPostOrElseThrow(postId);
+        Comment comment = commentService.findCommentOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
@@ -62,33 +62,28 @@ public class CommentController {
     }
 
     /* update comment */
-    @PutMapping("/{postId}/comment/{id}")
+    @PutMapping("/comment/edit/{id}")
     public CommentDTO updateComment(@PathVariable("postId") Long postId,
                                     @PathVariable("id") Long commentId,
                               @RequestBody @Valid CommentDTO commentDTO ) {
-        Post post = postService.findOrElseThrow(postId);
-        Comment comment = commentService.findOrElseThrow(commentId);
+        Post post = postService.findPostOrElseThrow(postId);
+        Comment comment = commentService.findCommentOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
         }
 
-       /* comment.setName(commentDTO.getName());
-        comment.setEmail(commentDTO.getEmail());
-        comment.setBody(commentDTO.getBody());*/
-        BeanUtils.copyProperties(commentDTO, comment, "id");
+        commentMapper.copyToDomainObject(commentDTO, comment);
 
-        comment = commentService.createComment(comment);
-
-        return commentMapper.convertToDto(comment);
+        return commentMapper.convertToDto(commentService.createComment(comment));
     }
 
-    @DeleteMapping("/{postId}/comment/{id}")
+    @DeleteMapping("/comment/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable("postId") Long postId,
                               @PathVariable("id") Long commentId) {
-        Post post = postService.findOrElseThrow(postId);
-        Comment comment = commentService.findOrElseThrow(commentId);
+        Post post = postService.findPostOrElseThrow(postId);
+        Comment comment = commentService.findCommentOrElseThrow(commentId);
 
         if (!comment.getPost().getId().equals(post.getId())) {
             throw new PostNotFoundException(postId);
