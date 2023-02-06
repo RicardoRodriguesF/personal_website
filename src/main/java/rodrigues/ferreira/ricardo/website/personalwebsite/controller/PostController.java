@@ -8,16 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CategoryDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
-import rodrigues.ferreira.ricardo.website.personalwebsite.repository.CategoryRepository;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CategoryService;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.PostService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,7 @@ public class PostController {
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostDTO createPost(@RequestBody @Valid PostDTO postRequest) {
+    public PostDTO createPost(@RequestBody @Valid PostRequest postRequest) {
         Category category = categoryService.findOrElseThrow(postRequest.getCategoryId());
         Post post = postMapper.convertToEntity(postRequest);
         post.setCategory(category);
@@ -43,35 +44,41 @@ public class PostController {
         return postMapper.convertToDto(post);
     }
 
-    @GetMapping("/getAll")
-    public Page<PostDTO> getAllPost(@PageableDefault(size = 10) Pageable pageable) {
-        Page<Post> postPage = postService.getPostPaged(pageable);
+    @GetMapping("/showAll")
+    public Page<PostDTO> showAllPosts(@PageableDefault(size = 10) Pageable pageable) {
+        Page<Post> postPage = postService.getPostsPaged(pageable);
         List<PostDTO> postDTOList = postMapper.toCollectionDto(postPage.getContent());
         //todo falta implementar a ordenação, talvez eu queira por data ou por popularidade
 
         return new PageImpl<>(postDTOList, pageable, postPage.getTotalElements());
     }
 
-    @GetMapping("/{id}")
-    public PostDTO getPostById(@PathVariable("id") Long posId) {
-        Post post = postService.findOrElseThrow(posId);
+    @GetMapping("/showAllShort")
+    public Page<PostShortDTO> showAllShortPosts(@PageableDefault(size = 20) Pageable pageable) {
+        Page<Post> postPage = postService.getPostsPaged(pageable);
+        List<PostShortDTO> postDTOList = postMapper.toCollectionShortDto(postPage.getContent());
+        //todo falta implementar a ordenação, talvez eu queira por data ou por popularidade
+
+        return new PageImpl<>(postDTOList, pageable, postPage.getTotalElements());
+    }
+
+    @GetMapping("show/{id}")
+    public PostDTO showSinglePost(@PathVariable("id") Long posId) {
+        Post post = postService.findPostOrElseThrow(posId);
         return postMapper.convertToDto(post);
     }
 
     /* update post */
-    @PutMapping("/{id}")
+    @PutMapping("edit/{id}")
     public PostDTO updatePost(@PathVariable("id") Long postId,
-                              @RequestBody @Valid PostDTO postDTO ) {
-        Post post = postService.findOrElseThrow(postId);
-        postMapper.copyToEntity(postDTO, post);
-        BeanUtils.copyProperties(postDTO, post, "id");
+                              @RequestBody @Valid PostRequest postRequest ) {
+        Post post = postService.findPostOrElseThrow(postId);
+        postMapper.copyToDomainObject(postRequest, post);
 
-        post = postService.createPost(post);
-
-        return postMapper.convertToDto(post);
+        return postMapper.convertToDto(postService.createPost(post));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("id") Long postId) {
         postService.deletePost(postId);

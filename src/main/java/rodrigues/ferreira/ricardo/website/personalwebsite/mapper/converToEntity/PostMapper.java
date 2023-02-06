@@ -3,6 +3,9 @@ package rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
 
@@ -18,17 +21,25 @@ public class PostMapper {
     public PostDTO convertToDto(Post post) {
         return modelMapper.map(post, PostDTO.class);
     }
+    public PostShortDTO convertToShortDto(Post post) {
+        post.setContent(post.getContent().substring(0, 10));
+        return modelMapper.map(post, PostShortDTO.class);
+    }
 
-    public Post convertToEntity(PostDTO postDTO) {
-        return modelMapper.map(postDTO, Post.class);
+    public Post convertToEntity(PostRequest postRequest) {
+        return modelMapper.map(postRequest, Post.class);
     }
 
     public List<PostDTO> toCollectionDto(List<Post> postList) {
         return postList.stream().map(this::convertToDto).collect(Collectors.toList());
     }
+    public List<PostShortDTO> toCollectionShortDto(List<Post> postList) {
+        return postList.stream().map(this::convertToShortDto).collect(Collectors.toList());
+    }
 
-    public void copyToEntity(PostDTO postDTO, Post post) {
-        modelMapper.map(postDTO, post);
+    public void copyToDomainObject(PostRequest postRequest, Post post) {
+        post.setCategory(new Category());
+        modelMapper.map(postRequest, post);
     }
 }
 

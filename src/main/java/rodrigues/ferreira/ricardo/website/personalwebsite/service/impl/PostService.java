@@ -23,11 +23,11 @@ public class PostService {
         return postRepository.save(post);
     }
 
-    public Page<Post> getPostPaged(Pageable pageble) {
-        return postRepository.findAll(pageble);
+    public Page<Post> getPostsPaged(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
-    public Post findOrElseThrow(Long posId) {
+    public Post findPostOrElseThrow(Long posId) {
         Post post = postRepository.findById(posId).orElseThrow(() -> new PostNotFoundException(posId));
         postRepository.flush();
         return post;
