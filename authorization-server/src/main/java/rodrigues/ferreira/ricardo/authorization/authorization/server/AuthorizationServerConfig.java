@@ -25,13 +25,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
+        clients
+            .inMemory()
                 .withClient("website-angular")
                 .secret(passwordEncoder.encode("web123456"))
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("read", "write")
                 .accessTokenValiditySeconds(1600)
-                .refreshTokenValiditySeconds(3600);
+                .refreshTokenValiditySeconds(3600)
+            .and()
+                .withClient("app-android")
+                .secret(passwordEncoder.encode("app123456"))
+                .authorizedGrantTypes("client_credentials")
+                .scopes("read");
     }
 
     @Override
@@ -44,5 +50,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService);
+        //.reuseRefreshTokens(false);
     }
 }
