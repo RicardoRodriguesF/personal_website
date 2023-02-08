@@ -37,7 +37,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("app-android")
                 .secret(passwordEncoder.encode("app123456"))
                 .authorizedGrantTypes("client_credentials")
-                .scopes("read");
+                .scopes("read")
+            .and()
+                .withClient("app-angular")
+                .secret(passwordEncoder.encode("angular123456"))
+                .authorizedGrantTypes("authorization_code")
+                .scopes("read", "write")
+                .redirectUris("https://localhost:8080/app-angular/callback");
     }
 
     @Override
