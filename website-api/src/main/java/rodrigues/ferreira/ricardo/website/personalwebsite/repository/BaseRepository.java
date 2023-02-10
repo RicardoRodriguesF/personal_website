@@ -5,7 +5,7 @@ package rodrigues.ferreira.ricardo.website.personalwebsite.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-import rodrigues.ferreira.ricardo.website.personalwebsite.entity.BaseModel;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.BaseEntity;
 
 /**
  * See this link as a reference to Spring Data repositories:
@@ -16,7 +16,7 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.entity.BaseModel;
  * advanced CRUD operations.
  */
 @NoRepositoryBean
-public interface BaseRepository<T extends BaseModel>
+public interface BaseRepository<T extends BaseEntity>
 	extends JpaRepository<T, Long> {
 
 

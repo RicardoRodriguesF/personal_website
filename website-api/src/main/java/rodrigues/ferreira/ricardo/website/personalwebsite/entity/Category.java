@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Categories")
-public class Category extends BaseModel{
+public class Category extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
