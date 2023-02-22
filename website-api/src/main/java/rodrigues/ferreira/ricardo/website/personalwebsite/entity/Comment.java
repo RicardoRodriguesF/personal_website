@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "comments")
-public class Comment extends BaseModel{
+public class Comment extends BaseEntity {
 
     @Column
     private String name;

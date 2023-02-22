@@ -3,9 +3,7 @@ package rodrigues.ferreira.ricardo.website.personalwebsite.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "posts")
-public class Post extends BaseModel {
+public class Post extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
