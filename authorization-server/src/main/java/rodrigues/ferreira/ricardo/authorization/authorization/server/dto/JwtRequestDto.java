@@ -3,17 +3,19 @@
  */
 package rodrigues.ferreira.ricardo.authorization.authorization.server.dto;
 
-import lombok.Data;
-
-import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The request DTO used for authentication.
  */
-@Data
-public class JwtRequestDto implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class JwtRequestDto {
 
 	private String usernameOrEmail;
 	private String password;

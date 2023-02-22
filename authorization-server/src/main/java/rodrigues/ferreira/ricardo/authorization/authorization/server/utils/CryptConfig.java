@@ -1,4 +1,4 @@
-package rodrigues.ferreira.ricardo.authorization.authorization.server.security;
+package rodrigues.ferreira.ricardo.authorization.authorization.server.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

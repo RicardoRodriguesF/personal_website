@@ -1,15 +1,16 @@
-package rodrigues.ferreira.ricardo.authorization.authorization.server.security;
+package rodrigues.ferreira.ricardo.authorization.authorization.server.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.repository.UserRepository;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.entity.User;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
