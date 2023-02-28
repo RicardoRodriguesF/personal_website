@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.dto.JwtResponseDto;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.exceptions.InvalidJwtAuthenticationException;
-import rodrigues.ferreira.ricardo.authorization.authorization.server.service.CustomUserDetailsService;
+import rodrigues.ferreira.ricardo.authorization.authorization.server.service.JPAUserDetailsService;
 
 import java.util.Base64;
 import java.util.Date;
@@ -30,7 +30,7 @@ public class JwtTokenProvider {
     private final long jwtExpirationDate = 360000;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private JPAUserDetailsService customUserDetailsService;
 
     Algorithm algorithm = null;
 
@@ -48,23 +48,13 @@ public class JwtTokenProvider {
         return new JwtResponseDto(username, true, currentDate, expireDate, accessToken, refreshToken);
     }
 
-    public JwtResponseDto refreshToken(String refreshToken) {
-        if (refreshToken.contains("Bearer ")) refreshToken =
-                refreshToken.substring("Bearer ".length());
-
-        com.auth0.jwt.JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT decodedJWT = verifier.verify(refreshToken);
-        String username = decodedJWT.getSubject();
-        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
-        return createAccessToken(username, roles);
-    }
-
     private String getAccessToken(String username,List<String> roles, Date currentDate, Date expireDate) {
         String issuerUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         return JWT.create()
                 .withClaim("roles", roles)
                 .withIssuedAt(currentDate)
                 .withExpiresAt(expireDate)
+                .withSubject(username)
                 .withIssuer(issuerUrl)
                 .sign(algorithm)
                 .strip();
@@ -76,6 +66,7 @@ public class JwtTokenProvider {
                 .withClaim("roles", roles)
                 .withIssuedAt(currentDate)
                 .withExpiresAt(validityRefreshToken)
+                .withSubject(username)
                 .sign(algorithm)
                 .strip();
     }
@@ -84,6 +75,17 @@ public class JwtTokenProvider {
         DecodedJWT decodedJWT = decodeToken(token);
         UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(decodedJWT.getSubject());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    public JwtResponseDto refreshToken(String refreshToken) {
+        if (refreshToken.contains("Bearer ")) refreshToken =
+                refreshToken.substring("Bearer ".length());
+
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(refreshToken);
+        String username = decodedJWT.getSubject();
+        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+        return createAccessToken(username, roles);
     }
 
     private DecodedJWT decodeToken(String token) {

@@ -3,8 +3,9 @@ package rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.AuthorResponse;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
+import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.PostRequest;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
@@ -19,6 +20,10 @@ public class PostMapper {
     private ModelMapper modelMapper;
 
     public PostDTO convertToDto(Post post) {
+        return modelMapper.map(post, PostDTO.class);
+    }
+    public PostDTO convertToDtoWithAuthor(Post post, AuthorResponse author) {
+        post.setAuthorId(author.getId());
         return modelMapper.map(post, PostDTO.class);
     }
     public PostShortDTO convertToShortDto(Post post) {

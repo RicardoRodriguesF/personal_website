@@ -19,3 +19,14 @@ spring:
       hibernate:
       dialect: org.hibernate.dialect.MySQLDialect
       show-sql: true
+  session:
+    store-type: jdbc
+
+api:
+  auth:
+    provider-uri: "http://localhost:8082"
+    jks:
+      keypass: 123456
+      storepass: 123456
+      alias: apiblog
+      path: keystore/apiblog.jks

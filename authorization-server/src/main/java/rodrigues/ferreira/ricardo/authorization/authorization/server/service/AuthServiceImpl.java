@@ -3,16 +3,14 @@ package rodrigues.ferreira.ricardo.authorization.authorization.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.dto.JwtRequestDto;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.dto.JwtResponseDto;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.dto.RegisterDto;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.entity.Role;
-import rodrigues.ferreira.ricardo.authorization.authorization.server.entity.User;
+import rodrigues.ferreira.ricardo.authorization.authorization.server.entity.UserEntity;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.repository.RoleRepository;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.repository.UserRepository;
 import rodrigues.ferreira.ricardo.authorization.authorization.server.security.jwt.JwtTokenProvider;
@@ -42,38 +40,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<JwtResponseDto> login(JwtRequestDto jwtRequestDto) {
-        var usernameOrEmail = jwtRequestDto.getUsernameOrEmail();
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        jwtRequestDto.getUsernameOrEmail(),
-                        jwtRequestDto.getPassword()
-                )
-        );
-
-        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
-        ;
-
-        var tokenResponse = new JwtResponseDto();
-        tokenResponse = jwtTokenProvider.createAccessToken(usernameOrEmail, user.getRoles().stream().map(Role::getDescription).collect(Collectors.toList()));
-
-        return ResponseEntity.ok(tokenResponse);
-
-    }
-
-    public ResponseEntity<JwtResponseDto> refreshToken(String usernameOrEmail, String refreshToken) {
-        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
-        ;
-        var tokenResponse = new JwtResponseDto();
-
-        tokenResponse = jwtTokenProvider.refreshToken(refreshToken);
-
-        return ResponseEntity.ok(tokenResponse);
-    }
-
-    @Override
     public String register(RegisterDto registerDto) {
 
         if (userRepository.existsByUsername(registerDto.getUsername())) {
@@ -82,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByEmail(registerDto.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
-        var user = new User();
+        var user = new UserEntity();
         user.setName(registerDto.getUsername());
         user.setUsername(registerDto.getUsername());
         user.setPassword(cryptconfig.passwordEncoder().encode(registerDto.getPassword()));
@@ -96,5 +62,33 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
 
         return "User registered successfully!.";
+    }
+
+    @Override
+    public ResponseEntity<JwtResponseDto> login(JwtRequestDto jwtRequestDto) {
+        var usernameOrEmail = jwtRequestDto.getUsernameOrEmail();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        jwtRequestDto.getUsernameOrEmail(),
+                        jwtRequestDto.getPassword()
+                )
+        );
+
+        UserEntity user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
+
+        var tokenResponse = jwtTokenProvider.createAccessToken(user.getUsername(),
+                user.getRoles().stream().map(Role::getDescription).collect(Collectors.toList()));
+
+        return ResponseEntity.ok(tokenResponse);
+    }
+
+    public ResponseEntity<JwtResponseDto> refreshToken(String usernameOrEmail, String refreshToken) {
+        userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username or email: " + usernameOrEmail));
+
+        var tokenResponse = jwtTokenProvider.refreshToken(refreshToken);
+
+        return ResponseEntity.ok(tokenResponse);
     }
 }
