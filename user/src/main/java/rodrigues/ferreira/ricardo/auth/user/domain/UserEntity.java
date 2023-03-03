@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user.domain;
+package rodrigues.ferreira.ricardo.auth.user.domain;
 
 import org.springframework.data.annotation.CreatedDate;
 

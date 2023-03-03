@@ -1,5 +1,6 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +12,9 @@ import org.springframework.security.oauth2.client.AuthorizedClientServiceOAuth2A
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,10 +33,10 @@ public class WebClientConfig {
             HttpSecurity http) throws Exception {
         http.authorizeRequests().anyRequest().permitAll()
                 .and()
-                    .csrf().disable()
+                .csrf().disable()
                 .oauth2ResourceServer()
-                    .jwt()
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter());
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter());
 
         return http.build();
 
@@ -46,7 +49,7 @@ public class WebClientConfig {
                 jwt -> {
                     List<String> userRoleAuthorities = jwt.getClaimAsStringList("authorities");
 
-                    if(userRoleAuthorities == null) {
+                    if (userRoleAuthorities == null) {
                         userRoleAuthorities = Collections.emptyList();
                     }
 
@@ -56,8 +59,8 @@ public class WebClientConfig {
 
                     scopeAuthorities
                             .addAll(userRoleAuthorities.stream()
-                            .map(SimpleGrantedAuthority::new)
-                            .toList());
+                                    .map(SimpleGrantedAuthority::new)
+                                    .toList());
 
                     return scopeAuthorities;
                 }
@@ -76,11 +79,10 @@ public class WebClientConfig {
             ClientRegistrationRepository clientRegistrationRepository,
             OAuth2AuthorizedClientService auth2AuthorizedClientService
     ) {
-        var authorizedClientProvider =
-                OAuth2AuthorizedClientProviderBuilder
-                        .builder()
-                        .clientCredentials()
-                        .build();
+        var authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder
+                .builder()
+                .clientCredentials()
+                .build();
 
         var clientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
                 clientRegistrationRepository,

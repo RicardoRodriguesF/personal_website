@@ -1,7 +1,10 @@
+server:
+  port: 8081
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: 'jdbc:mysql://localhost:3306/mywebsite'
+    url: jdbc:mysql://localhost:3306/mywebsite
     username: app_employees
     password: app_employees
     initialize: true
@@ -12,28 +15,26 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-  jackson:
-    deserialization:
-      fail-on-unknown-properties: true
-      fail-on-ignored-properties: true
-  mvc:
-    throw-exception-if-no-handler-found: true
-  resources:
-    add-mappings: false
+
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: 'http://localhost:8081/'
-        client:
-          registration:
-            apiuser-client:
-              provider: authblog
-              client-id: apiuser
-              client-secret: 123456
-              authorization-grant-type: client_credentials
-              scope: users:read
-              client-name: apiuser-client
-          provider:
-            authblog:
-              issuer-uri: http://localhost:8082
+          issuer-uri: http://localhost:8082
+      client:
+        registration:
+          apiuser-client:
+            provider: authblog
+            client-id: apiuser
+            client-secret: 123456
+            authorization-grant-type: client_credentials
+            scope: users:read
+            client-name: apiuser-client
+        provider:
+          authblog:
+            issuer-uri: http://localhost:8082
+
+api:
+  user-api:
+    url: 'http://localhost:8080'
+    encoded-credentials: 'YWRtaW5AZW1haWwuY29tOmFkbWlu'

@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user.api;
+package rodrigues.ferreira.ricardo.auth.user.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

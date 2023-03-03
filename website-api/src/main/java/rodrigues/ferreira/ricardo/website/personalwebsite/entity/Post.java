@@ -36,6 +36,9 @@ public class Post extends BaseEntity {
     private LocalDate updatedOn;
 
     private Long authorId;
+    private String authorName;
+
+
 
     /* todo
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

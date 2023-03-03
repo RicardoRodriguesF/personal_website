@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user.security;
+package rodrigues.ferreira.ricardo.auth.user.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

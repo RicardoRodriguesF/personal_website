@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user.api;
+package rodrigues.ferreira.ricardo.auth.user.api;
 
 import javax.validation.constraints.NotBlank;
 

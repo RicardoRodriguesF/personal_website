@@ -1,7 +1,7 @@
-package com.algaworks.example.auth.user.config;
+package rodrigues.ferreira.ricardo.auth.user.config;
 
-import com.algaworks.example.auth.user.domain.UserEntity;
-import com.algaworks.example.auth.user.domain.UserRepository;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserEntity;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;

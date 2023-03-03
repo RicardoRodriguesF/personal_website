@@ -1,6 +1,6 @@
-package com.algaworks.example.auth.user.security;
+package rodrigues.ferreira.ricardo.auth.user.security;
 
-import com.algaworks.example.auth.user.domain.UserRepository;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

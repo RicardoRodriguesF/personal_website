@@ -1,26 +1,24 @@
-server:
-  port: 8081
-security:
-  jwt:
-    token:
-      secret-key: 53ccr37
-      expiration-time: 3600000
 spring:
+  security:
+    user:
+      name: admin@email.com
+      password: 123456
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/auth_bd
+    url: jdbc:mysql://localhost:3306/user
     initialize: true
     username: app_employees
     password: app_employees
   jpa:
+    show-sql: 'true'
     hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-      dialect: org.hibernate.dialect.MySQLDialect
-      show-sql: true
+      ddl-auto: none
   session:
     store-type: jdbc
+
+
+server:
+  port: 8082
 
 api:
   auth:
@@ -28,5 +26,5 @@ api:
     jks:
       keypass: 123456
       storepass: 123456
-      alias: apiblog
-      path: keystore/apiblog.jks
+      alias: awblog
+      path: keystore/awblog.jks

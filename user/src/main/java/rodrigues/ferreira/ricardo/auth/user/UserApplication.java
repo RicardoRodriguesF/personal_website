@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user;
+package rodrigues.ferreira.ricardo.auth.user;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

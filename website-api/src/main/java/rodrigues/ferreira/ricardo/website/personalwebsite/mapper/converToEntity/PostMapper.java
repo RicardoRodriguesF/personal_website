@@ -13,6 +13,7 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Component
 public class PostMapper {
 
@@ -24,8 +25,14 @@ public class PostMapper {
     }
     public PostDTO convertToDtoWithAuthor(Post post, AuthorResponse author) {
         post.setAuthorId(author.getId());
+        post.setAuthorName(author.getName());
+        if (author.getId() == null) {
+            post.setAuthorId(0L);
+            post.setAuthorName("anonymous");
+        }
         return modelMapper.map(post, PostDTO.class);
     }
+
     public PostShortDTO convertToShortDto(Post post) {
         post.setContent(post.getContent().substring(0, 10));
         return modelMapper.map(post, PostShortDTO.class);

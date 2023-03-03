@@ -1,4 +1,4 @@
-package com.algaworks.example.auth.user.config;
+package rodrigues.ferreira.ricardo.auth.user.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

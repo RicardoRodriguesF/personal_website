@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties("aw.user-api")
+@ConfigurationProperties("api.user-api")
 @Component
 public class UserClientProperties {
 	private String url;

@@ -1,5 +1,5 @@
 server:
-  port: 8083
+  port: 8080
 spring:
   datasource:
     username: app_employees
@@ -14,4 +14,4 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8082
-          #jwk-set-uri: http://localhost:8082/oauth2/jwks
+          # jwk-set-uri: http://localhost:8082/oauth2/jwks

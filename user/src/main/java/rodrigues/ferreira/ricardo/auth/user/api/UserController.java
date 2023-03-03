@@ -1,10 +1,10 @@
-package com.algaworks.example.auth.user.api;
+package rodrigues.ferreira.ricardo.auth.user.api;
 
 
-import com.algaworks.example.auth.user.domain.UserEntity;
-import com.algaworks.example.auth.user.domain.UserRepository;
-import com.algaworks.example.auth.user.security.CanReadUsers;
-import com.algaworks.example.auth.user.security.CanWriteUsers;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserEntity;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserRepository;
+import rodrigues.ferreira.ricardo.auth.user.security.CanReadUsers;
+import rodrigues.ferreira.ricardo.auth.user.security.CanWriteUsers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;

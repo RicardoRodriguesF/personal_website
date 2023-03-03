@@ -1,5 +1,6 @@
 package rodrigues.ferreira.ricardo.authorization.authorization.server.security;
 
+
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -24,6 +25,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwsEncoder;
 import org.springframework.security.oauth2.server.authorization.*;
+import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -37,6 +39,7 @@ import rodrigues.ferreira.ricardo.authorization.authorization.server.repository.
 import java.io.InputStream;
 import java.security.KeyStore;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +74,7 @@ public class AuthSecurityConfig {
                     authorities.add(authority.toString());
                 }
                 context.getClaims().claim("user_id", userEntity.getId().toString());
-                context.getClaims().claim("user_name", userEntity.getName());
+                context.getClaims().claim("user_fullname", userEntity.getName());
                 context.getClaims().claim("authorities", authorities);
             }
 
@@ -81,9 +84,9 @@ public class AuthSecurityConfig {
     @Bean
     public RegisteredClientRepository registeredClientRepository(PasswordEncoder passwordEncoder,
                                                                  JdbcTemplate jdbcTemplate) {
-        RegisteredClient userClient = RegisteredClient
+        RegisteredClient apiUserClient = RegisteredClient
                 .withId("1")
-                .clientId("user")
+                .clientId("apiuser")
                 .clientSecret(passwordEncoder.encode("123456"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
@@ -97,9 +100,9 @@ public class AuthSecurityConfig {
                         .build())
                 .build();
 
-        RegisteredClient blogClient = RegisteredClient
+        RegisteredClient apiBlogClient = RegisteredClient
                 .withId("2")
-                .clientId("blog")
+                .clientId("apiblog")
                 .clientSecret(passwordEncoder.encode("123456"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -122,10 +125,11 @@ public class AuthSecurityConfig {
 
         JdbcRegisteredClientRepository clientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
 
-//        clientRepository.save(blogClient);
-//        clientRepository.save(userClient);
+       clientRepository.save(apiBlogClient);
+        clientRepository.save(apiUserClient);
 
         return clientRepository;
+      /*  return new InMemoryRegisteredClientRepository(Arrays.asList(apiUserClient, apiBlogClient));*/
     }
 
     @Bean
@@ -145,7 +149,6 @@ public class AuthSecurityConfig {
                 registeredClientRepository
         );
     }
-
     @Bean
     public ProviderSettings providerSettings(AuthProperties authProperties) {
         return ProviderSettings.builder()

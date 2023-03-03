@@ -1,6 +1,6 @@
-package com.algaworks.example.auth.user.api;
+package rodrigues.ferreira.ricardo.auth.user.api;
 
-import com.algaworks.example.auth.user.domain.UserEntity;
+import rodrigues.ferreira.ricardo.auth.user.domain.UserEntity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

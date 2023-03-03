@@ -1,72 +1,84 @@
 package rodrigues.ferreira.ricardo.authorization.authorization.server.entity;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.annotation.CreatedDate;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
+import javax.persistence.*;
+import java.time.OffsetDateTime;
 
-@Data
 @Entity
-@Table(name = "users")
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserEntity implements Serializable, UserDetails {
+public class UserEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-    @Column(nullable = false, unique = true)
-    private String username;
-    @Column(nullable = false, unique = true)
-    private String email;
-    @Column(nullable = false)
-    private String password;
+	@Id
+	@GeneratedValue
+	private Long id;
+	private String name;
+	@Column(unique = true)
+	private String email;
+	private String password;
+	@Enumerated(EnumType.STRING)
+	private Type type;
+	@CreatedDate
+	private OffsetDateTime createdAt;
 
-    private Boolean accountNonExpired;
+	public UserEntity() {
+	}
 
-    private Boolean accountNonLocked;
+	public UserEntity(String name, String email, String password, Type type) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+		this.type = type;
+	}
 
-    private Boolean credentialsNonExpired;
+	public Long getId() {
+		return id;
+	}
 
-    private Boolean enabled;
+	public void setId(Long id) {
+		this.id = id;
+	}
 
+	public String getName() {
+		return name;
+	}
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
-    )
-    private Set<Role> roles;
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.accountNonExpired;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.accountNonLocked;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.credentialsNonExpired;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
+	public OffsetDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(OffsetDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public enum Type {
+		ADMIN, CLIENT;
+	}
 }

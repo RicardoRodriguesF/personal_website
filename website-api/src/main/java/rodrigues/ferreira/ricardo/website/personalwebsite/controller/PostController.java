@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import rodrigues.ferreira.ricardo.website.personalwebsite.client.UserReactiveClient;
 import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.AuthorResponse;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.PostRequest;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.security.CanWritePosts;
 import rodrigues.ferreira.ricardo.website.personalwebsite.security.SecurityService;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CategoryService;
@@ -85,6 +85,14 @@ public class PostController {
                         (post, AuthorResponse.of(userResponse)))
                 .blockOptional()
                 .orElseGet(() -> postMapper.convertToDto(post));
+
+      /*  return userReactiveClient.findById(post.getAuthorId())
+                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
+                .blockOptional()
+                .orElseGet(() -> PostDetailedResponse.of(post));
+        return userClient.findById(post.getAuthorId())
+                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
+                .orElseGet(() -> PostDetailedResponse.of(post));*/
     }
 
     /* update post */
