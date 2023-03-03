@@ -1,6 +1,5 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.controller;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -8,17 +7,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import rodrigues.ferreira.ricardo.website.personalwebsite.client.UserReactiveClient;
+import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.AuthorResponse;
+import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.PostRequest;
+import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.security.CanWritePosts;
+import rodrigues.ferreira.ricardo.website.personalwebsite.security.SecurityService;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CategoryService;
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.PostService;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,14 +36,26 @@ public class PostController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private UserReactiveClient userReactiveClient;
+
+    @Autowired
+    private SecurityService securityService;
+
+    @CanWritePosts
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     public PostDTO createPost(@RequestBody @Valid PostRequest postRequest) {
         Category category = categoryService.findOrElseThrow(postRequest.getCategoryId());
         Post post = postMapper.convertToEntity(postRequest);
         post.setCategory(category);
-        post = postService.createPost(post);
-        return postMapper.convertToDto(post);
+        post.setAuthorId(securityService.getUserId());
+        postService.createPost(post);
+        return userReactiveClient.findById(post.getAuthorId())
+                .map(userResponse -> postMapper.convertToDtoWithAuthor
+                        (post, AuthorResponse.of(userResponse)))
+                .blockOptional()
+                .orElseGet(() -> postMapper.convertToDto(post));
     }
 
     @GetMapping("/showAll")
@@ -65,19 +79,42 @@ public class PostController {
     @GetMapping("show/{id}")
     public PostDTO showSinglePost(@PathVariable("id") Long posId) {
         Post post = postService.findPostOrElseThrow(posId);
-        return postMapper.convertToDto(post);
+
+        return userReactiveClient.findById(post.getAuthorId())
+                .map(userResponse -> postMapper.convertToDtoWithAuthor
+                        (post, AuthorResponse.of(userResponse)))
+                .blockOptional()
+                .orElseGet(() -> postMapper.convertToDto(post));
+
+      /*  return userReactiveClient.findById(post.getAuthorId())
+                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
+                .blockOptional()
+                .orElseGet(() -> PostDetailedResponse.of(post));
+        return userClient.findById(post.getAuthorId())
+                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
+                .orElseGet(() -> PostDetailedResponse.of(post));*/
     }
 
     /* update post */
+    @CanWritePosts
     @PutMapping("edit/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public PostDTO updatePost(@PathVariable("id") Long postId,
-                              @RequestBody @Valid PostRequest postRequest ) {
+                              @RequestBody @Valid PostRequest postRequest) {
         Post post = postService.findPostOrElseThrow(postId);
+      /*  if (post.getAuthorId().equals(securityService.getUserId())) {
+        }*/
+
         postMapper.copyToDomainObject(postRequest, post);
 
-        return postMapper.convertToDto(postService.createPost(post));
+        return userReactiveClient.findById(post.getAuthorId())
+                .map(userResponse -> postMapper.convertToDtoWithAuthor
+                        (post, AuthorResponse.of(userResponse)))
+                .blockOptional()
+                .orElseGet(() -> postMapper.convertToDto(post));
     }
 
+    @CanWritePosts
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable("id") Long postId) {

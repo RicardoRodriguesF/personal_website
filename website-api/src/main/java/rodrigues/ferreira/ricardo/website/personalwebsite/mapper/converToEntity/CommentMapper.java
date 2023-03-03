@@ -4,10 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CommentDTO;
-import rodrigues.ferreira.ricardo.website.personalwebsite.dto.input.PostRequest;
-import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Comment;
-import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 
 import java.util.List;
 import java.util.stream.Collectors;

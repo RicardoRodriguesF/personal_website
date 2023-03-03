@@ -1,6 +1,9 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -32,10 +35,10 @@ public class Post extends BaseEntity {
     @Column(columnDefinition = "datetime")
     private LocalDate updatedOn;
 
-   /* todo
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User author;*/
+    private Long authorId;
+    private String authorName;
+
+
 
     /* todo
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,6 +54,7 @@ public class Post extends BaseEntity {
     * vinculo com uma entidade pai, por exemplo, quando você tem um carro em uma lista de carros
     * relacionados a um concessionária. Se a concessionári
     */
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();;
 

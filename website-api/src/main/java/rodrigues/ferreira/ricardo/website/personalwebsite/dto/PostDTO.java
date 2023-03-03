@@ -1,11 +1,15 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.dto;
 
-import lombok.Data;
+import lombok.*;
+import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.AuthorResponse;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Data
+@Setter @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PostDTO extends BaseDTO{
 
 
@@ -22,5 +26,7 @@ public class PostDTO extends BaseDTO{
     private Set<CommentDTO> comments;
 
     private CategoryDTO category;
+
+    private AuthorResponse author;
 
 }
