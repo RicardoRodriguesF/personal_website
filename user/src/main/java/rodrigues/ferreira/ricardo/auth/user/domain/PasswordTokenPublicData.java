@@ -3,9 +3,9 @@ package rodrigues.ferreira.ricardo.auth.user.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class PasswordTokenPublicData {
     private final String email;
-    private final Long createdAtTimestamp;
+    private final Long createAtTimestamp;
 }

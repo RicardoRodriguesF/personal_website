@@ -1,7 +1,7 @@
 package rodrigues.ferreira.ricardo.auth.user.config;
 
-import rodrigues.ferreira.ricardo.auth.user.domain.UserEntity;
-import rodrigues.ferreira.ricardo.auth.user.domain.UserRepository;
+import rodrigues.ferreira.ricardo.auth.user.domain.entity.UserEntity;
+import rodrigues.ferreira.ricardo.auth.user.domain.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -27,11 +27,11 @@ public class FirstUserConfig implements ApplicationRunner {
 			return;
 		}
 		
-		logger.info("Nenhum usuário encontrado, cadastrando usuários padrão.");
+		logger.info("No users found, registering standard users.");
 
 		userRepository.save(
 				new UserEntity(
-						"Alex Silva",
+						"Pedro Horta",
 						"admin@email.com",
 						passwordEncoder.encode("123456"),
 						UserEntity.Type.ADMIN
@@ -40,8 +40,8 @@ public class FirstUserConfig implements ApplicationRunner {
 
 		userRepository.save(
 				new UserEntity(
-						"João da Silva",
-						"joao@email.com",
+						"Paulo Rui",
+						"Paulo@email.com",
 						passwordEncoder.encode("123456"),
 						UserEntity.Type.CLIENT
 				)

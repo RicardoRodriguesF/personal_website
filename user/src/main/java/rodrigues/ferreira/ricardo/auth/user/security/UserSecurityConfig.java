@@ -28,7 +28,7 @@ public class UserSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests().anyRequest().permitAll()
                 .and()
                     .csrf().disable()
                 .oauth2ResourceServer()
