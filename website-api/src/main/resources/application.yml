@@ -36,5 +36,5 @@ spring:
 
 api:
   user-api:
-    url: 'http://localhost:8080'
+    url: 'http://localhost:8083'
     encoded-credentials: 'YWRtaW5AZW1haWwuY29tOmFkbWlu'
