@@ -8,8 +8,8 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.algaworks.example.auth</groupId>
-	<artifactId>user</artifactId>
+	<groupId>rodrigues.ferreira.ricardo.website</groupId>
+	<artifactId>personal-website</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>user</name>
 	<description>User Resource Server </description>
@@ -57,6 +57,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<version>3.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -64,6 +69,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
 			</plugin>
 		</plugins>
 	</build>

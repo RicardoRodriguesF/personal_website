@@ -8,21 +8,27 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="personal-website" />
+        <module name="api-gateway" />
         <module name="authorization-server" />
         <module name="user" />
+        <module name="eureka-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-gateway" target="17" />
       <module name="auth-server" target="17" />
       <module name="authorization-server" target="17" />
+      <module name="eureka-server" target="17" />
       <module name="personal-website" target="17" />
       <module name="user" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gateway" options="-parameters" />
       <module name="auth-server" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
       <module name="personal-website" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>

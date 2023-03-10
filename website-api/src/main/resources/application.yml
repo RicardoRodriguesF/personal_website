@@ -1,7 +1,9 @@
 server:
-  port: 8081
+  port: ${PORT:8081}
 
 spring:
+  application:
+    name: blog-api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mywebsite
@@ -15,12 +17,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  mail:
+    host: smtp.sendGrid.net
+    port: 587
+    username: apikey
+    password: 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
 
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8082
+          issuer-uri: http://localhost:8764/auth-api
       client:
         registration:
           apiuser-client:
@@ -33,8 +40,21 @@ spring:
         provider:
           authblog:
             issuer-uri: http://localhost:8082
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      instance:
+        prefer-ip-address: true
+        hostname: localhost
 
 api:
   user-api:
     url: 'http://localhost:8083'
     encoded-credentials: 'YWRtaW5AZW1haWwuY29tOmFkbWlu'
+
+
+blog:
+  email:
+    impl: smtp
+    from: Ricardo Rodrigues Ferreira <noreply@email.com>

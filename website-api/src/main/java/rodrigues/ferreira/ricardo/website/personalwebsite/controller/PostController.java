@@ -14,6 +14,7 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.StatusPost;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
 import rodrigues.ferreira.ricardo.website.personalwebsite.security.CanWritePosts;
 import rodrigues.ferreira.ricardo.website.personalwebsite.security.SecurityService;

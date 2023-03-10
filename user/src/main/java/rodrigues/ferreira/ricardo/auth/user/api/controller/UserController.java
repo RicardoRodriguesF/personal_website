@@ -1,6 +1,7 @@
 package rodrigues.ferreira.ricardo.auth.user.api.controller;
 
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import rodrigues.ferreira.ricardo.auth.user.api.request.UserRequest;
 import rodrigues.ferreira.ricardo.auth.user.api.response.UserResponse;
 import rodrigues.ferreira.ricardo.auth.user.api.request.UserUpdateRequest;
@@ -31,8 +32,11 @@ public class UserController {
 	
 	private final UserRepository userRepository;
 
-	public UserController(UserRepository userRepository) {
+	private final PasswordEncoder passwordEncoder;
+
+	public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@GetMapping
@@ -50,6 +54,7 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@CanWriteUsers
 	public UserResponse create(@RequestBody @Valid UserRequest userRequest) {
+		userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 		return UserResponse.of(userRepository.save(userRequest.toEntity()));
 	}
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.BaseDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CommentDTO;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.StatusPost;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -33,5 +34,7 @@ public class PostRequest extends BaseDTO {
     private Long categoryId;
 
     private Long authorId;
+
+    private StatusPost statusPost;
 
 }

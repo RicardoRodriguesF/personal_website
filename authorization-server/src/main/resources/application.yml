@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: auth-api
   security:
     user:
       name: admin@email.com
@@ -15,6 +17,14 @@ spring:
       ddl-auto: none
   session:
     store-type: jdbc
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      instance:
+        prefer-ip-address: true
+        hostname: localhost
 
 
 server:
