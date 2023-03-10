@@ -3,6 +3,7 @@ package rodrigues.ferreira.ricardo.website.personalwebsite.dto;
 import lombok.*;
 import rodrigues.ferreira.ricardo.website.personalwebsite.controller.input.AuthorResponse;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.StatusPost;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -28,5 +29,7 @@ public class PostDTO extends BaseDTO{
     private CategoryDTO category;
 
     private AuthorResponse author;
+
+    private StatusPost statusPost;
 
 }

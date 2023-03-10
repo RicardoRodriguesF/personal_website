@@ -15,7 +15,13 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
 
+
     public Post createPost(Post post) {
+
+        if (post.getStatusPost().getDescription().equals("published")) {
+            post.published();
+        }
+
         return postRepository.save(post);
     }
 

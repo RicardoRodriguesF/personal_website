@@ -6,6 +6,8 @@
         <option value="$PROJECT_DIR$/website-api/pom.xml" />
         <option value="$PROJECT_DIR$/authorization-server/pom.xml" />
         <option value="$PROJECT_DIR$/user/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka-server/pom.xml" />
+        <option value="$PROJECT_DIR$/api-gateway/pom.xml" />
       </list>
     </option>
   </component>
