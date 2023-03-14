@@ -8,7 +8,7 @@ import org.springframework.data.domain.AbstractAggregateRoot;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.event.PostPublishedEvent;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,8 +25,8 @@ public class Post extends AbstractAggregateRoot<Post> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    protected Long id;
+    @Column(name="postId")
+    protected Long postId;
 
     @Column(nullable = false)
     private String title;
@@ -38,10 +38,12 @@ public class Post extends AbstractAggregateRoot<Post> {
     private String content;
 
     @Column(columnDefinition = "datetime")
-    private LocalDate createdOn;
+    private Instant createdOn;
 
     @Column(columnDefinition = "datetime")
-    private LocalDate updatedOn;
+    private Instant updatedOn;
+
+    private Integer voteCount = 0;
 
     private Long authorId;
 
@@ -50,32 +52,10 @@ public class Post extends AbstractAggregateRoot<Post> {
     @Enumerated(EnumType.STRING)
     private StatusPost statusPost = StatusPost.DRAFT;
 
-    public void published() {
-        setStatusPost(StatusPost.PUBLISHED);
-        setCreatedOn(LocalDate.now());
-        registerEvent(new PostPublishedEvent(this));
-    }
-
-    public void unpublished() {
-        setStatusPost(StatusPost.UNPUBLISHED);
-        setUpdatedOn(LocalDate.now());
-        registerEvent(new PostPublishedEvent(this));
-
-    }
-
-    public void draft() {
-        setStatusPost(StatusPost.DRAFT);
-        setCreatedOn(LocalDate.now());
-        registerEvent(new PostPublishedEvent(this));
-
-    }
-    /* todo
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Like> likes = new HashSet<>();*/
+    private Set<Vote> votes = new HashSet<>();
+
     /*
-
-
-
      * OrphanRemoval está presente na maioria das anotações de relacionamento entre entidades,
      * e que serve para definir a forma como uma ação de remoção atribuída a um objeto terá impacto
      * sobre os objetos relacionados.
@@ -83,12 +63,30 @@ public class Post extends AbstractAggregateRoot<Post> {
      * vinculo com uma entidade pai, por exemplo, quando você tem um carro em uma lista de carros
      * relacionados a um concessionária. Se a concessionári
      */
-
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> comments = new HashSet<>();
-    ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    public void published() {
+        setStatusPost(StatusPost.PUBLISHED);
+        setCreatedOn(Instant.now());
+        registerEvent(new PostPublishedEvent(this));
+    }
+
+    public void unpublished() {
+        setStatusPost(StatusPost.UNPUBLISHED);
+        setUpdatedOn(Instant.now());
+        registerEvent(new PostPublishedEvent(this));
+
+    }
+
+    public void draft() {
+        setStatusPost(StatusPost.DRAFT);
+        setCreatedOn(Instant.now());
+        registerEvent(new PostPublishedEvent(this));
+
+    }
 }

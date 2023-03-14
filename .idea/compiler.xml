@@ -7,11 +7,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="personal-website" />
         <module name="api-gateway" />
         <module name="authorization-server" />
         <module name="user" />
         <module name="eureka-server" />
+      </profile>
+      <profile name="Annotation profile for personal-website" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
+        </processorPath>
+        <module name="personal-website" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -29,7 +40,7 @@
       <module name="auth-server" options="-parameters" />
       <module name="authorization-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
-      <module name="personal-website" options="-parameters" />
+      <module name="personal-website" options="-parameters -Amapstruct.defaultComponentModel=spring" />
       <module name="user" options="-parameters" />
     </option>
   </component>
