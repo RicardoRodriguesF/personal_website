@@ -1,4 +1,4 @@
-package rodrigues.ferreira.ricardo.website.personalwebsite.service.impl;
+package rodrigues.ferreira.ricardo.website.personalwebsite.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

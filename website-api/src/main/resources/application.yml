@@ -27,7 +27,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8764/auth-api
+          issuer-uri: http://localhost:8082
       client:
         registration:
           apiuser-client:

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.CategoryDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.CategoryMapper;
-import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CategoryService;
+import rodrigues.ferreira.ricardo.website.personalwebsite.service.CategoryService;
 
 import javax.validation.Valid;
 import java.util.List;

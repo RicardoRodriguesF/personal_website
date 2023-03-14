@@ -1,6 +1,5 @@
 package rodrigues.ferreira.ricardo.website.personalwebsite.controller;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +8,8 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Comment;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.exception.PostNotFoundException;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.CommentMapper;
-import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.CommentService;
-import rodrigues.ferreira.ricardo.website.personalwebsite.service.impl.PostService;
+import rodrigues.ferreira.ricardo.website.personalwebsite.service.CommentService;
+import rodrigues.ferreira.ricardo.website.personalwebsite.service.PostService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -42,10 +41,10 @@ public class CommentController {
     @GetMapping("/comments")
     public @ResponseBody List<CommentDTO> showAllComments(@PathVariable("postId") Long postId) {
         Post post = postService.findPostOrElseThrow(postId);
-        if (!postId.equals(post.getId())) {
+        if (!postId.equals(post.getPostId())) {
             throw new PostNotFoundException(postId);
         }
-        List<Comment> commentList = commentService.getCommentsByPostId(postId);
+        List<Comment> commentList = commentService.getCommentsByPostId(post);
         return commentMapper.toCollectionDto(commentList);
     }
 
@@ -55,7 +54,7 @@ public class CommentController {
         Post post = postService.findPostOrElseThrow(postId);
         Comment comment = commentService.findCommentOrElseThrow(commentId);
 
-        if (!comment.getPost().getId().equals(post.getId())) {
+        if (!comment.getPost().getPostId().equals(post.getPostId())) {
             throw new PostNotFoundException(postId);
         }
         return commentMapper.convertToDto(comment);
@@ -69,7 +68,7 @@ public class CommentController {
         Post post = postService.findPostOrElseThrow(postId);
         Comment comment = commentService.findCommentOrElseThrow(commentId);
 
-        if (!comment.getPost().getId().equals(post.getId())) {
+        if (!comment.getPost().getPostId().equals(post.getPostId())) {
             throw new PostNotFoundException(postId);
         }
 
@@ -85,7 +84,7 @@ public class CommentController {
         Post post = postService.findPostOrElseThrow(postId);
         Comment comment = commentService.findCommentOrElseThrow(commentId);
 
-        if (!comment.getPost().getId().equals(post.getId())) {
+        if (!comment.getPost().getPostId().equals(post.getPostId())) {
             throw new PostNotFoundException(postId);
         }
         commentService.deleteComment(comment.getId());

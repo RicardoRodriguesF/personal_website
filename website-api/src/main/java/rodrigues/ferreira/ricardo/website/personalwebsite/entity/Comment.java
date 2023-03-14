@@ -26,7 +26,7 @@ public class Comment extends BaseEntity {
     private LocalDate createdOn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "postId", nullable = false)
     private Post post;
 
 }

@@ -1,4 +1,4 @@
-package rodrigues.ferreira.ricardo.website.personalwebsite.service.impl;
+package rodrigues.ferreira.ricardo.website.personalwebsite.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,11 +17,9 @@ public class PostService {
 
 
     public Post createPost(Post post) {
-
         if (post.getStatusPost().getDescription().equals("published")) {
             post.published();
         }
-
         return postRepository.save(post);
     }
 
@@ -33,8 +31,8 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public Post findPostOrElseThrow(Long posId) {
-        Post post = postRepository.findById(posId).orElseThrow(() -> new PostNotFoundException(posId));
+    public Post findPostOrElseThrow(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId));
         postRepository.flush();
         return post;
     }

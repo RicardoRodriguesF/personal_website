@@ -1,8 +1,9 @@
-package rodrigues.ferreira.ricardo.website.personalwebsite.service.impl;
+package rodrigues.ferreira.ricardo.website.personalwebsite.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Comment;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
 import rodrigues.ferreira.ricardo.website.personalwebsite.exception.CommentNotFound;
 import rodrigues.ferreira.ricardo.website.personalwebsite.repository.CommentRepository;
 
@@ -19,8 +20,8 @@ public class CommentService {
         return repository.save(comment);
     }
 
-    public List<Comment> getCommentsByPostId(Long postId) {
-        return repository.findByPostId(postId);
+    public List<Comment> getCommentsByPostId(Post post) {
+        return repository.findByPost(post);
     }
 
    /* public Page<Comment> getCommentPaged(Pageable pageble) {
