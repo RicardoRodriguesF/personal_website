@@ -46,8 +46,7 @@ public class SecurityService {
 
 	@Transactional(readOnly = true)
 	public UserResponse getCurrentUser() {
-		Jwt principal = (Jwt) SecurityContextHolder.
-				getContext().getAuthentication().getPrincipal();
+		Jwt principal = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return userReactiveClient.findById(Long.valueOf(principal.getClaim("user_id"))).blockOptional()
 				.orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getSubject()));
 	}

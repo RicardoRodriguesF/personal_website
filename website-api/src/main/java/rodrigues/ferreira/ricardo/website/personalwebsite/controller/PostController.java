@@ -16,6 +16,7 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.controller.output.Post
 import rodrigues.ferreira.ricardo.website.personalwebsite.dto.PostShortDTO;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Category;
 import rodrigues.ferreira.ricardo.website.personalwebsite.entity.Post;
+import rodrigues.ferreira.ricardo.website.personalwebsite.entity.StatusPost;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.MapperPost;
 import rodrigues.ferreira.ricardo.website.personalwebsite.mapper.converToEntity.PostMapper;
 import rodrigues.ferreira.ricardo.website.personalwebsite.security.CanWritePosts;
@@ -24,6 +25,8 @@ import rodrigues.ferreira.ricardo.website.personalwebsite.service.CategoryServic
 import rodrigues.ferreira.ricardo.website.personalwebsite.service.PostService;
 
 import javax.validation.Valid;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -55,9 +58,8 @@ public class PostController {
     public PostResponse createPost(@RequestBody @Valid PostRequest postRequest) {
         Category category = categoryService.findOrElseThrow(postRequest.getCategoryId());
         Post post = mapperPost.map(postRequest, category, securityService.getCurrentUser());
-       /* post.setCategory(category);
-        post.setAuthorId(securityService.getUserId());*/
         postService.createPost(post);
+
         return userReactiveClient.findById(post.getAuthorId())
                 .map(userResponse -> postMapper.convertToDtoWithAuthor
                         (post, AuthorResponse.of(userResponse)))
@@ -85,23 +87,36 @@ public class PostController {
 
     @GetMapping("show/{id}")
     public PostResponse showSinglePost(@PathVariable("id") Long postId) {
-        Post post = postService.findPostOrElseThrow(postId);
-       /* UserResponse user = userReactiveClient.findById(post.getAuthorId()).block();*/
-
         return mapperPost.mapToDto(postService.findPostOrElseThrow(postId));
+    }
+    @GetMapping("show/one")
+    public PostResponse showOnePost() {
+        return mapperPost.mapToDto(postService.findOnePost());
+    }
+    @GetMapping("show/my_posts")
+    public List<PostResponse> showMyPosts() {
+        UserResponse userResponse = securityService.getCurrentUser();
+        assert userResponse != null;
+        return postMapper.toCollectionDto(postService.findMyPosts(userResponse.getName()));
+    }
 
-        /*return userReactiveClient.findById(post.getAuthorId())
-                .map(userResponse -> mapperPost.mapToDto(post))
-                .blockOptional()
-                .orElseGet(() -> postMapper.convertToDto(post));*/
+    @GetMapping("show/my_posts/status/{status}")
+    public List<PostResponse> showMyPostsWithStatus(@PathVariable("status") StatusPost status) {
+        UserResponse userResponse = securityService.getCurrentUser();
+        assert userResponse != null;
+        return postMapper.toCollectionDto(postService.findPostsPublishedByAuthor(status, userResponse.getName()));
+    }
+    @GetMapping("show/my_posts/title/date")
+    public List<PostResponse> showMyPostsWithTitleFilteredByDate(String title,
+                                                                 Instant createdOn,
+                                                                 Instant updatedOn) {
 
-      /*  return userReactiveClient.findById(post.getAuthorId())
-                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
-                .blockOptional()
-                .orElseGet(() -> PostDetailedResponse.of(post));
-        return userClient.findById(post.getAuthorId())
-                .map(userResponse -> PostDetailedResponse.of(post, AuthorResponse.of(userResponse)))
-                .orElseGet(() -> PostDetailedResponse.of(post));*/
+        return postMapper.toCollectionDto(postService.findTitleFilterDate(title,createdOn,updatedOn));
+    }
+
+    @GetMapping("show/newer")
+    public List<PostResponse> showNewerPostsVoted() {
+        return postMapper.toCollectionDto(postService.findNewerPostsVoted());
     }
 
     /* update post */

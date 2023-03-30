@@ -19,7 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "posts")
-public class Post extends AbstractAggregateRoot<Post> {
+public class Post extends AbstractAggregateRoot<Post>{
 
     private static final long serialVersionUID = 1L;
 

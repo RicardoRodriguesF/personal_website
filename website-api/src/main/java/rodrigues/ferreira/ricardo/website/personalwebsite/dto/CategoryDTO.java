@@ -15,4 +15,6 @@ public class CategoryDTO extends BaseDTO {
     private String name;
 
     private String description;
+
+    private Integer numberOfPosts;
 }

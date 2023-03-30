@@ -14,10 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Table(name = "comments")
-public class Comment extends BaseEntity {
+public class Comment {
 
     @Column
-    private String name;
+    private String username;
     @Column
     private String email;
     @Column
