@@ -24,9 +24,9 @@ public class CommentService {
         return repository.findByPost(post);
     }
 
-   /* public Page<Comment> getCommentPaged(Pageable pageble) {
-        return repository.findAll(pageble);
-    }*/
+    /* public Page<Comment> getCommentPaged(Pageable pageble) {
+         return repository.findAll(pageble);
+     }*/
     public void deleteComment(Long id) {
         repository.deleteById(id);
     }
@@ -35,5 +35,8 @@ public class CommentService {
         return repository.findById(CommentId).orElseThrow(() -> new CommentNotFound(CommentId));
     }
 
+    public List<Comment> getCommentsByUserId(String username) {
 
+        return repository.findByUsername(username);
+    }
 }

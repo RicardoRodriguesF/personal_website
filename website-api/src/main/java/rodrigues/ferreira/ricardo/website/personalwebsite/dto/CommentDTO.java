@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class CommentDTO extends BaseDTO{
 
     @NotEmpty()
-    private String name;
+    private String username;
 
     @NotEmpty()
     @Email
@@ -26,4 +26,5 @@ public class CommentDTO extends BaseDTO{
 
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate createdOn;
+
 }
