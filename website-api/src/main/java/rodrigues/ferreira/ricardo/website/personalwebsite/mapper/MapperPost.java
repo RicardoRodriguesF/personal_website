@@ -35,6 +35,7 @@ public abstract class MapperPost {
 
 
     @Mapping(target = "createdOn", expression = "java(java.time.Instant.now())")
+    @Mapping(target = "updatedOn", expression = "java(java.time.Instant.now())")
     @Mapping(target = "description", source = "postRequest.description")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "voteCount", constant = "0")
