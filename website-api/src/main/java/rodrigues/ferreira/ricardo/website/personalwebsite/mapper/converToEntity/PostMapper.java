@@ -51,6 +51,7 @@ public class PostMapper {
 
     public void copyToDomainObject(PostRequest postRequest, Post post) {
         post.setCategory(new Category());
+        post.setUpdatedOn(java.time.Instant.now());
         modelMapper.map(postRequest, post);
     }
 }

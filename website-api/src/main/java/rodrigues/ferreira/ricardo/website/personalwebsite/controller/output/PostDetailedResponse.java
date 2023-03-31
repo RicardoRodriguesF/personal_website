@@ -30,13 +30,13 @@ public class PostDetailedResponse extends BaseDTO {
 
     private LocalDate updatedOn;
 
+    private AuthorResponse author;
 /*
     private Set<Comment> comments;
 
 
     private Category category;*/
 
-    private AuthorResponse author;
 
 /*
     public static PostDetailedResponse of(Post post) {
